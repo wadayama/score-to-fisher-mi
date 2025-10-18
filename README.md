@@ -3,10 +3,11 @@
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.9.0-EE4C2C.svg)](https://pytorch.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![arXiv](https://img.shields.io/badge/arXiv-2510.05496-b31b1b.svg)](https://arxiv.org/abs/2510.05496)
 
 This repository contains the implementation code for reproducing the figures in the paper:
 
-**"Mutual Information Estimation via Score-to-Fisher Bridge for Nonlinear Gaussian Noise Channels"**  
+**["Mutual Information Estimation via Score-to-Fisher Bridge for Nonlinear Gaussian Noise Channels"](https://arxiv.org/abs/2510.05496)**
 *Tadashi Wadayama, Nagoya Institute of Technology*
 
 ## Overview
@@ -90,20 +91,11 @@ Each directory contains standalone scripts for reproducing specific figures from
 uv run python Gaussian_J/dsm_gaussian_multi_n.py
 ```
 
-**Expected results:**
-- Validates DSM-based Fisher information estimation
-- Tests dimensions n in {4, 8, 16}
-- Median relative error: < 1.3%
-
 #### Figure 2: Mutual Information (Gaussian Input)
 
 ```bash
 uv run python Gaussian_MI/MI.py
 ```
-
-**Expected results:**
-- Median relative error: 0.4%
-- 90th percentile error: 1.04%
 
 #### Figure 4: BPSK Input (Discrete Distribution)
 
@@ -111,21 +103,11 @@ uv run python Gaussian_MI/MI.py
 uv run python Discrete/bpsk.py
 ```
 
-**Expected results:**
-- Demonstrates effectiveness on discrete inputs
-- Compares DSM estimates with exact MI (via numerical integration)
-- Includes Gaussian input baseline
-
-#### Figure 6: Composite Nonlinear Channel (tanh composed with Linear)
+#### Figure 6: Composite Nonlinear Channel
 
 ```bash
 uv run python tanh_linear/tanh_linear.py
 ```
-
-**Expected results:**
-- Channel: Y_t = tanh(AX) + Z_t
-- Compares DSM with KDE-LOO baseline
-- Shows excellent agreement despite nonlinearity
 
 #### Figure 5: Linear Gaussian Channel
 
@@ -133,65 +115,17 @@ uv run python tanh_linear/tanh_linear.py
 uv run python Gaussian_Linear_MI/Linear_MI.py
 ```
 
-**Expected results:**
-- Channel: Y_t = AX + Z_t (A is orthogonal matrix)
-- Validates method on linear mixing
-
 #### Figure 3: Noise-Conditional Model
 
 ```bash
 uv run python Noise_Conditional/Noise_Conditional.py
 ```
 
-**Expected results:**
-- Single neural network for all noise levels
-- Trade-off: computational efficiency vs. accuracy
-
 ### Output Files
 
 Each script generates:
 - **PDF plots**: Visualization of MI estimates vs. ground truth
 - **PT files**: PyTorch saved results for further analysis
-
-## Key Results
-
-| Experiment | Median Rel. Error | Figure |
-|------------|------------------|--------|
-| Gaussian Fisher Information (n=4) | 1.20% | Fig. 1 |
-| Gaussian Fisher Information (n=8) | 0.38% | Fig. 1 |
-| Gaussian Mutual Information | 0.40% | Fig. 2 |
-| BPSK (low noise, t<0.1) | 0.6% | Fig. 4 |
-| BPSK (mid-range, 0.1 <= t < 5) | 2.8% | Fig. 4 |
-
-## Theoretical Background
-
-### de Bruijn Identity
-
-For the AWGN channel Y_t = X + Z_t:
-
-```
-d/dt h(Y_t) = 1/2 J(Y_t)
-```
-
-### I-MMSE Relation
-
-```
-d/dt I(X; Y_t) = -1/(2t^2) mmse(t)
-```
-
-### Fisher Integral Representation
-
-```
-I(X; Y_T) = 1/2 ∫_T^∞ (n/t - J(Y_t)) dt
-```
-
-### Denoising Score Matching (DSM)
-
-The DSM loss for learning the score function s_theta(y) approx nabla_y log p_{Y_t}(y):
-
-```
-L(theta) = E_{x,epsilon} [||s_theta(x + sqrt(t) epsilon) + epsilon/sqrt(t)||^2]
-```
 
 ## Implementation Details
 
@@ -205,11 +139,12 @@ L(theta) = E_{x,epsilon} [||s_theta(x + sqrt(t) epsilon) + epsilon/sqrt(t)||^2]
 If you use this code in your research, please cite:
 
 ```bibtex
-@article{wadayama2025mi,
+@article{wadayama2024mi,
   title={Mutual Information Estimation via Score-to-Fisher Bridge for Nonlinear Gaussian Noise Channels},
   author={Wadayama, Tadashi},
-  journal={arXiv preprint},
-  year={2025}
+  journal={arXiv preprint arXiv:2510.05496},
+  year={2024},
+  url={https://arxiv.org/abs/2510.05496}
 }
 ```
 
@@ -226,9 +161,3 @@ This work was supported by JST, CRONOS, Japan Grant Number JPMJCS25N5.
 For questions or issues, please open an issue on GitHub or contact:
 - Tadashi Wadayama (wadayama@nitech.ac.jp)
 - Nagoya Institute of Technology
-
-## Related Papers
-
-- [Guo et al., 2005] "Mutual information and minimum mean-square error in Gaussian channels"
-- [Vincent, 2011] "A connection between score matching and denoising autoencoders"
-- [Song & Ermon, 2019] "Generative modeling by estimating gradients of the data distribution"
